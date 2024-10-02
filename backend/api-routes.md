@@ -14,8 +14,8 @@
 
 ## connection-request
 
-- POST /request/send/:status/:userId
-- POST /request/review/:status/:requestId
+- POST /request/send/:status/:userId // interested or ignored
+- POST /request/review/:status/:requestId // accepted or rejected
 
 ## user
 

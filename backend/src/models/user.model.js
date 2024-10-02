@@ -76,6 +76,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+userSchema.index({ firstName: 1, lastName: 1 });
+
 // generate jwt token
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id, emailId: this.emailId }, JWT_SECRET, {
