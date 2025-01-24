@@ -1,12 +1,12 @@
-import express from 'express';
-import bcrypt from 'bcrypt';
+import express from "express";
+import bcrypt from "bcrypt";
 
-import { User } from '../models/user.model.js';
-import { validateSignupData } from '../utils/validation.js';
+import { User } from "../models/user.model.js";
+import { validateSignupData } from "../utils/validation.js";
 
 const router = express.Router();
 
-router.post('/signup', async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     // validate data
     validateSignupData(req);
@@ -25,20 +25,20 @@ router.post('/signup', async (req, res) => {
 
     // save user to db
     await user.save();
-    res.json({ message: 'User added successfully' });
+    res.json({ message: "User added successfully" });
   } catch (error) {
-    console.log('signup err ---', error);
+    console.log("signup err ---", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
 
     const user = await User.findOne({ emailId });
     if (!user) {
-      throw new Error('User not found.');
+      throw new Error("User not found.");
     }
     const isPasswordValid = await user.validatePassword(password);
 
@@ -46,27 +46,27 @@ router.post('/login', async (req, res) => {
       // generate a jwt token
       const token = user.generateAuthToken();
       res
-        .cookie('token', token, {
+        .cookie("token", token, {
           httpOnly: true,
           expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         })
-        .json({ token, message: 'Login successful' });
+        .json({ token, message: "Login successful", user });
     } else {
-      throw new Error('Invalid credentials');
+      throw new Error("Invalid credentials");
     }
   } catch (error) {
-    console.log('login err ---', error);
+    console.log("login err ---", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/logout', (req, res) => {
+router.post("/logout", (req, res) => {
   res
-    .cookie('token', null, {
+    .cookie("token", null, {
       expires: new Date(Date.now()),
     })
     .json({
-      message: 'Logout successful',
+      message: "Logout successful",
     });
 });
 
