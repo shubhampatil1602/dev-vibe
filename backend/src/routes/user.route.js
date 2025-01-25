@@ -1,46 +1,46 @@
-import express from 'express';
+import express from "express";
 
-import { userAuth } from '../middleware/auth.middleware.js';
-import { ConnectionRequest } from '../models/connectionRequest.model.js';
-import { User } from '../models/user.model.js';
+import { userAuth } from "../middleware/auth.middleware.js";
+import { ConnectionRequest } from "../models/connectionRequest.model.js";
+import { User } from "../models/user.model.js";
 
 const router = express.Router();
 
-const USER_DATA = 'firstName, lastName, age, skills, about, photoUrl';
+const USER_DATA = "firstName lastName age skills about photoUrl";
 
 // pending connection requests
-router.get('/requests/received', userAuth, async (req, res) => {
+router.get("/requests/received", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
     const connectionRequests = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
-      status: 'interested',
-    }).populate('fromUserId', USER_DATA);
+      status: "interested",
+    }).populate("fromUserId", USER_DATA);
 
     res.json(connectionRequests);
   } catch (error) {
-    console.log('requests err ---', error);
+    console.log("requests err ---", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/connections', userAuth, async (req, res) => {
+router.get("/connections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
     const connections = await ConnectionRequest.find({
       $or: [
         {
           toUserId: loggedInUser._id,
-          status: 'accepted',
+          status: "accepted",
         },
         {
           fromUserId: loggedInUser._id,
-          status: 'accepted',
+          status: "accepted",
         },
       ],
     })
-      .populate('fromUserId', USER_DATA)
-      .populate('toUserId', USER_DATA);
+      .populate("fromUserId", USER_DATA)
+      .populate("toUserId", USER_DATA);
 
     const data = connections.map((row) => {
       if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
@@ -51,12 +51,12 @@ router.get('/connections', userAuth, async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    console.log('connections err ---', error);
+    console.log("connections err ---", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/feed', userAuth, async (req, res) => {
+router.get("/feed", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
 
@@ -74,10 +74,9 @@ router.get('/feed', userAuth, async (req, res) => {
           toUserId: loggedInUser._id,
         },
       ],
-    })
-      .select('fromUserId toUserId')
-      .populate('fromUserId', 'firstName lastName')
-      .populate('toUserId', 'firstName lastName');
+    }).select("fromUserId toUserId");
+    // .populate("fromUserId", "firstName lastName")
+    // .populate("toUserId", "firstName lastName");
 
     const hideUsersFromFeed = new Set();
     connection.forEach((req) => {
@@ -104,7 +103,7 @@ router.get('/feed', userAuth, async (req, res) => {
 
     res.json(users);
   } catch (error) {
-    console.log('feed err ---', error);
+    console.log("feed err ---", error);
     res.status(500).json({ message: error.message });
   }
 });
