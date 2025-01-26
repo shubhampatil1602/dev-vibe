@@ -1,24 +1,28 @@
+import { DEFAULT_AVATAR } from "../utils/constants";
+
 const FeedUserCard = ({ feed }) => {
+  const { photoUrl, firstName, lastName, age, gender, about, skills } = feed;
+  console.log(feed);
   return (
-    <div className='card bg-base-300 w-96 shadow-xl'>
-      <figure className='px-2 pt-2'>
+    <div className='card bg-base-300 w-96 min-h-[525px] shadow-xl'>
+      <figure>
         <img
-          src={feed[1]?.photoUrl}
-          alt='Shoes'
-          className='rounded-xl w-full object-cover h-56'
+          src={photoUrl ? photoUrl : DEFAULT_AVATAR}
+          alt='Profile Photo'
+          className='rounded-t-xl w-full object-cover h-[300px]'
         />
       </figure>
-      <div className='card-body'>
+      <div className='px-4 py-3 h-[225px] flex flex-col justify-between'>
         <h2 className='card-title'>
-          {feed[1]?.firstName} {feed[1]?.lastName} | {feed[1]?.age},{" "}
-          {feed[1]?.gender}
+          {firstName} {lastName} | {age}, {gender}
         </h2>
-        <p>{feed[1]?.about}</p>
-        <div className='flex justify-between itenms-center'>
-          <button className='btn bg-red-800 hover:bg-red-600 text-white w-36 mt-3'>
+        {skills && <p className='text-sm'>{skills.join(", ")}</p>}
+        <p className='overflow-scroll h-[100px]'>{about}</p>
+        <div className='flex justify-center gap-2 items-center'>
+          <button className='btn flex-1 bg-purple-800 hover:bg-purple-600 text-white w-36 mt-3'>
             Ignore
           </button>
-          <button className='btn bg-green-800 hover:bg-green-600 text-white w-36 mt-3'>
+          <button className='btn flex-1 bg-pink-800 hover:bg-pink-600 text-white w-36 mt-3'>
             Interested
           </button>
         </div>

@@ -7,6 +7,7 @@ import { TriangleAlert } from "lucide-react";
 import { addUser } from "../redux/slices/userSlice";
 
 import { BASE_URL } from "../utils/constants";
+import ErrorMessage from "../components/ErrorMessage";
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -52,12 +53,7 @@ const Login = () => {
           <h2 className='card-title'>Welcome back!</h2>
           <p>Login to your account to find your vibe.</p>
           <div className='card-actions w-full'>
-            {errorMessage && (
-              <div className='border flex items-center gap-2 border-red-700 bg-red-900 bg-opacity-50 w-full rounded-md px-3 py-2 mt-3 mb-1'>
-                <TriangleAlert className='h-5 w-5' />
-                <span>{errorMessage}</span>
-              </div>
-            )}
+            {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
             <label className='form-control w-full max-w-xs'>
               <div className='label'>
                 <span className='label-text'>Email ID</span>
