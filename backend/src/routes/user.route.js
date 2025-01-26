@@ -6,7 +6,7 @@ import { User } from "../models/user.model.js";
 
 const router = express.Router();
 
-const USER_DATA = "firstName lastName age skills about photoUrl";
+const USER_DATA = "firstName lastName age skills about photoUrl gender";
 
 // pending connection requests
 router.get("/requests/received", userAuth, async (req, res) => {
