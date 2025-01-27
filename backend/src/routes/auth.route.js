@@ -24,8 +24,15 @@ router.post("/signup", async (req, res) => {
     });
 
     // save user to db
-    await user.save();
-    res.json({ message: "User added successfully" });
+    const savedUser = await user.save();
+
+    const token = savedUser.generateAuthToken();
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      })
+      .json({ token, message: "User added successfully", user: savedUser });
   } catch (error) {
     console.log("signup err ---", error);
     res.status(500).json({ message: error.message });

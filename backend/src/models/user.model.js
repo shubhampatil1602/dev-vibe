@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-import { JWT_SECRET } from '../config/constants.js';
+import { JWT_SECRET } from "../config/constants.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Email is invalid');
+          throw new Error("Email is invalid");
         }
       },
     },
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       validate(value) {
         if (!validator.isStrongPassword(value)) {
-          throw new Error('Enter a strong password.');
+          throw new Error("Enter a strong password.");
         }
       },
     },
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: {
-        values: ['male', 'female', 'others'],
+        values: ["male", "female", "others"],
         message: `{VALUE} is incorrect gender type`,
       },
       // validate(value) {
@@ -59,15 +59,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       validate(value) {
         if (!validator.isURL(value)) {
-          throw new Error('Invalid photo url');
+          throw new Error("Invalid photo url");
         }
       },
       default:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwxEuOgrydWFyurdUW5UNRhk6tShevfV2ZJQ&s',
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwxEuOgrydWFyurdUW5UNRhk6tShevfV2ZJQ&s",
     },
     about: {
       type: String,
-      default: 'Software Engineer',
+      default: "Software Engineer",
     },
     skills: {
       type: [String],
@@ -81,7 +81,7 @@ userSchema.index({ firstName: 1, lastName: 1 });
 // generate jwt token
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id, emailId: this.emailId }, JWT_SECRET, {
-    expiresIn: '7d',
+    expiresIn: "7d",
   });
 
   return token;
@@ -94,4 +94,4 @@ userSchema.methods.validatePassword = async function (clientPassword) {
   return isPasswordValid;
 };
 
-export const User = mongoose.model('User', userSchema);
+export const User = mongoose.model("User", userSchema);
