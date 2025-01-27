@@ -10,12 +10,12 @@ import { addUser } from "../redux/slices/userSlice";
 
 const EditProfile = ({ userData }) => {
   const [profile, setProfile] = useState({
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    age: userData.age,
-    gender: userData.gender,
-    about: userData.about,
-    photoUrl: userData.photoUrl,
+    firstName: userData?.user?.firstName || userData?.firstName,
+    lastName: userData?.user?.lastName || userData?.lastName,
+    age: userData?.user?.age || userData?.age,
+    gender: userData?.user?.gender || userData?.gender,
+    about: userData?.user?.about || userData?.about,
+    photoUrl: userData?.user?.photoUrl || userData?.photoUrl,
     skills: [],
   });
 
@@ -26,13 +26,11 @@ const EditProfile = ({ userData }) => {
 
   const navigate = useNavigate();
 
-  const genders = ["male", "female", "others"].filter(
-    (gender) => gender !== userData.gender
-  );
+  const genders = ["male", "female", "others"];
 
   const handleSaveProfile = async () => {
     try {
-      const data = await axios.patch(
+      const res = await axios.patch(
         `${BASE_URL}/profile/edit`,
         {
           about,
@@ -46,8 +44,8 @@ const EditProfile = ({ userData }) => {
           withCredentials: true,
         }
       );
-      console.log(data);
-      dispatch(addUser(data?.data?.data));
+      console.log(res);
+      dispatch(addUser(res?.data?.data));
     } catch (error) {
       console.log(error);
       setError(error?.response?.data?.message || "Something went wrong");
@@ -133,7 +131,6 @@ const EditProfile = ({ userData }) => {
                   className='select select-bordered'
                   onChange={handleChange}
                 >
-                  <option value={gender}>{gender}</option>
                   {genders.map((gender) => (
                     <option key={gender} value={gender}>
                       {gender}

@@ -24,13 +24,18 @@ const Feed = () => {
   useEffect(() => {
     fetchFeed();
   }, []);
+
+  if (!feed) {
+    return;
+  }
+  if (feed.length <= 0) {
+    return <div className='text-xl md:text-2xl font-bold'>No Feed Found</div>;
+  }
   return (
     <>
       {feed && (
         <div className='p-10 flex flex-wrap justify-center items-center gap-10'>
-          {feed?.map((user) => (
-            <FeedUserCard key={user._id} feed={user} />
-          ))}
+          <FeedUserCard feed={feed[0]} />
         </div>
       )}
     </>
