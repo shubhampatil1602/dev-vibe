@@ -4,28 +4,27 @@ import { useDispatch } from "react-redux";
 import { removeFeed } from "../redux/slices/feedSlice";
 import { useLocation } from "react-router-dom";
 
-const FeedUserCard = ({ feed }) => {
+const FeedUserCard = ({ user }) => {
   const dispatch = useDispatch();
   const path = useLocation();
 
   const handleSendRequest = async (status, userId) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${BASE_URL}/request/send/${status}/${userId}`,
         {},
         {
           withCredentials: true,
         }
       );
-      console.log(res.data);
       dispatch(removeFeed(userId));
     } catch (error) {
       console.log(error);
     }
   };
-  const { _id, photoUrl, firstName, lastName, age, gender, about, skills } =
-    feed;
 
+  const { _id, photoUrl, firstName, lastName, age, gender, about, skills } =
+    user;
   return (
     <div className='card bg-base-300 w-96 min-h-[525px] shadow-xl'>
       <figure>

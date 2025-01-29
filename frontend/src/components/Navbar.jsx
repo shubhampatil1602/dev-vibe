@@ -28,7 +28,9 @@ const Navbar = () => {
   return (
     <nav className='navbar bg-base-300 px-10'>
       <div className='flex-1'>
-        <a className='btn btn-ghost text-xl'>DevVibe</a>
+        <Link to='/' className='btn btn-ghost text-xl'>
+          DevVibe
+        </Link>
       </div>
       {userData && (
         <p className='mr-6'>

@@ -87,14 +87,8 @@ router.get("/feed", userAuth, async (req, res) => {
     // excluding connected users and loggedin user
     const users = await User.find({
       $and: [
-        {
-          _id: {
-            $nin: Array.from(hideUsersFromFeed),
-          },
-          _id: {
-            $ne: loggedInUser._id,
-          },
-        },
+        { _id: { $nin: Array.from(hideUsersFromFeed) } },
+        { _id: { $ne: loggedInUser._id } },
       ],
     })
       .select(USER_DATA)

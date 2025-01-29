@@ -24,7 +24,7 @@ const Requests = () => {
 
   const handleReviewRequest = async (status, requestId) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${BASE_URL}/request/review/${status}/${requestId}`,
         {},
         {

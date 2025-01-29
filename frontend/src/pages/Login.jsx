@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,13 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // If user is already logged in, redirect to home
+    if (userData) {
+      navigate("/");
+    }
+  }, [userData, navigate]);
+
   const handleLogin = async () => {
     if (!emailId || !password) {
       return setErrorMessage("Enter Credentials");
@@ -36,7 +43,6 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(res.data);
       dispatch(addUser(res.data));
       return navigate("/");
     } catch (error) {
@@ -64,8 +70,6 @@ const Login = () => {
       );
 
       dispatch(addUser(res.data.user));
-      console.log(res);
-      return navigate("/profile");
     } catch (error) {
       console.log(error);
       setErrorMessage(error?.response?.data?.message || "Something went wrong");

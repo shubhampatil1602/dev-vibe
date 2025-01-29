@@ -26,8 +26,6 @@ const EditProfile = ({ userData }) => {
 
   const navigate = useNavigate();
 
-  const genders = ["male", "female", "others"];
-
   const handleSaveProfile = async () => {
     try {
       const res = await axios.patch(
@@ -46,6 +44,7 @@ const EditProfile = ({ userData }) => {
       );
       console.log(res);
       dispatch(addUser(res?.data?.data));
+      navigate("/");
     } catch (error) {
       console.log(error);
       setError(error?.response?.data?.message || "Something went wrong");
@@ -131,11 +130,10 @@ const EditProfile = ({ userData }) => {
                   className='select select-bordered'
                   onChange={handleChange}
                 >
-                  {genders.map((gender) => (
-                    <option key={gender} value={gender}>
-                      {gender}
-                    </option>
-                  ))}
+                  <option value=''>Select</option>
+                  <option value='male'>male</option>
+                  <option value='female'>female</option>
+                  <option value='others'>others</option>
                 </select>
               </label>
             </div>
@@ -182,7 +180,7 @@ const EditProfile = ({ userData }) => {
       <div className=''>
         <h2 className='text-2xl font-semibold px-3 mb-2'>Preview</h2>
         <FeedUserCard
-          feed={{
+          user={{
             firstName,
             lastName,
             age,
